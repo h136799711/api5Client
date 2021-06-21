@@ -1,0 +1,34 @@
+{
+  "name": "dbh/api5client",
+  "description": "api 5 client",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+  ],
+  "config": {
+    "secure-http": false
+  },
+  "minimum-stability": "stable",
+  "authors": [
+  ],
+  "scripts": {
+  },
+  "autoload": {
+    "psr-4": {
+      "by\\component\\api5client\\": "src/",
+      "byTest\\component\\api5client\\": "test/"
+    }
+  },
+  "require": {
+    "php": ">=5.6",
+    "itboye/component_http": "1.1.*",
+    "dbh/core": "1.3.*",
+    "ext-json": "*"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://composer.hebidu.cn"
+    }
+  ]
+}
