@@ -14,7 +14,7 @@ class LoginSessionApi extends BaseApi
 
     public function check() {
         $bussParams = [
-            'nonce' => 'a'.strval(rand(1000, 10000)),
+            'nonce' => time()
         ];
         $po = RequestPoBuilder::getInstance()
             ->bussParams($bussParams)
