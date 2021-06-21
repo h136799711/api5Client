@@ -32,8 +32,6 @@ var_dump($ret);
 if ($ret->isSuccess()) {
     $data = $ret->getData();
     $token = $data['jwt'];
-    $expire = $data['jwt_expire'];
-    var_dump(date("Y-m-d H:i:s", $expire));
 }
 $ret = $loginSessionApi->setAuthorization($token)->check();
 var_dump($ret);
