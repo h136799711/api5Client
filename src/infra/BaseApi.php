@@ -5,6 +5,7 @@ namespace by\component\api5client\infra;
 use by\component\http\ByHttp\Http\Psr7\Consts\MediaType;
 use by\component\http\ByHttp\Http\Psr7\Consts\RequestHeader;
 use by\component\http\HttpRequest;
+use by\component\string_extend\helper\StringHelper;
 use by\infrastructure\constants\BaseErrorCode;
 use by\infrastructure\helper\CallResultHelper;
 
@@ -53,7 +54,7 @@ abstract class BaseApi
     function send(RequestPo $requestPo, $headers = [])
     {
         $requestPo->setNotifyId($this->guid());
-        $requestPo->setAppRequestTime(time());
+        $requestPo->setAppRequestTime(StringHelper::numberFormat(microtime(true), 3));
         $requestPo->setClientId($this->clientId);
         $requestPo->setSign($this->sign($requestPo));
         $requestPo->setBussData($this->encrypt($requestPo));
