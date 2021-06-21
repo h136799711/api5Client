@@ -12,15 +12,14 @@ class LoginSessionApi extends BaseApi
         parent::__construct('', '','', '', '');
     }
 
-    public function check() {
+    public function check($userId) {
         $bussParams = [
-            'nonce' => time()
+            'user_id' => $userId
         ];
         $po = RequestPoBuilder::getInstance()
             ->bussParams($bussParams)
             ->serviceInfo('LoginSession/check','100')
             ->build();
-
         return $this->send($po);
     }
 
