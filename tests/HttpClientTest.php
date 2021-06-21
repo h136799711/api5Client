@@ -3,6 +3,9 @@
 require_once 'vendor/autoload.php';
 use by\component\api5client\loginSession\LoginSessionApi;
 
+date_default_timezone_set("PRC");
+//var_dump(date_default_timezone_get());
+//return;
 $apiUri = 'https://api-base.hebidu.cn/base';
 $devUri = 'http://127.0.0.1:8011/base';
 $clientId = 'by04esfH0glASt';
@@ -20,5 +23,17 @@ $loginSessionApi->setClientId($clientId);
 $loginSessionApi->setClientSecret($clientSecret);
 $loginSessionApi->setSystemPublicKey($systemPublicKey);
 $loginSessionApi->setUserPrivateKey($userPrivateKey);
-$ret = $loginSessionApi->check();
+
+//$ret = $loginSessionApi->login();
+$ret = \by\infrastructure\helper\CallResultHelper::fail();
+$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJieV9hcGkiLCJhdWQiOiJkdGVzdGFkbWluIiwiaWF0IjoxNjI0MjU0NzQyLjIxMDQ3NiwibmJmIjoxNjI0MjU0NzQyLjIxMDQ3NiwiZXhwIjoxNjI0MjU1NjQyLjIxMDQ3NiwidWlkIjoyLCJuYW1lIjoiZHRlc3RhZG1pbiIsImhlYWQiOiJodHRwOi8vaW1nMS5oZWJpZHUuY24vdXBsb2Fkcy9hdmF0YXIvMi9hdmF0YXIucG5nIiwic2lkIjoiMSM2NjNlMmVjMjcxMWZiMjcwNGE0NGUwYTViNTFkNWNiYSJ9.i3-KIZ_s7-zao74GFFYKvOo89tHjMLh2kcSjMK_OvpvElkJDjpaaGkDzMmCpzISHD5x5v-iX3yzaGva6xc93B6hSvMSDvE-2goM7scf9_u7tb1yDTlI_Ct7ezp-ZkFl0TrDXL4bCbgwCLF8UlZdw2ezU3Ri1oaoYdR-inYG6n2HmT9b3NE08v73KF8iU6gLnmIjrdGvnCIjl3KrssPsKM6-7-ZzutlSU3GXCSeGJ8a4iNLun9CHhoPS4jA8Q-SVwFdPvrbEwbN_6q5Ij6SVJn0KQvOcGKdz22dN5JW6Wik2MtKCb1BfYFTB2gnNkRQb5hMj9vBtocw1zxr5xPR9WlQ';
+var_dump($ret);
+
+if ($ret->isSuccess()) {
+    $data = $ret->getData();
+    $token = $data['jwt'];
+    $expire = $data['jwt_expire'];
+    var_dump(date("Y-m-d H:i:s", $expire));
+}
+$ret = $loginSessionApi->setAuthorization($token)->check();
 var_dump($ret);

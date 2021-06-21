@@ -16,6 +16,7 @@ abstract class BaseApi
     private $http;
     private $systemPublicKey;
     private $userPrivateKey;
+    private $authorization;
 
     /**
      * BaseHttpClient constructor.
@@ -35,7 +36,7 @@ abstract class BaseApi
         $this->http = new HttpRequest();
     }
 
-    private function guid()
+    protected function guid()
     {
         mt_srand((double)microtime() * 10000);//optional for php 4.2.0 and up.
         $charid = strtoupper(md5(uniqid(rand(), true)));
@@ -44,12 +45,12 @@ abstract class BaseApi
         return $uuid;
     }
 
-    private function getServiceUrl(RequestPo $requestPo)
+    protected function getServiceUrl(RequestPo $requestPo)
     {
         return rtrim($this->apiUri, '/') . '/' . $requestPo->getServiceVersion() . '/' . $requestPo->getServiceType();
     }
 
-    function send(RequestPo $requestPo)
+    function send(RequestPo $requestPo, $headers = [])
     {
         $requestPo->setNotifyId($this->guid());
         $requestPo->setAppRequestTime(time());
@@ -57,10 +58,13 @@ abstract class BaseApi
         $requestPo->setSign($this->sign($requestPo));
         $requestPo->setBussData($this->encrypt($requestPo));
         $postArr = $requestPo->toArray();
-        var_dump($postArr);
         $url = $this->getServiceUrl($requestPo);
+        if (!empty($this->getAuthorization())) {
+            $this->http->header(RequestHeader::AUTHORIZATION, $this->getAuthorization());
+        }
         $resp = $this->http
             ->header(RequestHeader::CONTENT_TYPE, MediaType::APPLICATION_FORM_URLENCODED)
+            ->headers($headers)
             ->post($url, $postArr);
         if (!$resp->success) {
             return CallResultHelper::fail('[请求错误]' . $resp->getError(), $resp->getError());
@@ -88,20 +92,19 @@ abstract class BaseApi
         return 'by_'.str_replace('/', '_', $serviceType);
     }
 
-    private function sign(RequestPo $po)
+    protected function sign(RequestPo $po)
     {
         $origin = $po->getAppRequestTime() . $this->clientSecret . $this->convertServiceType($po->getServiceType()) . $po->getServiceVersion() . $po->getBussData();
         return RsaUtil::sign($origin, $this->userPrivateKey);
     }
 
-    private function encrypt(RequestPo $po)
+    protected function encrypt(RequestPo $po)
     {
-        var_dump($po->getBussData());
         return RsaUtil::encryptChunk($po->getBussData(), $this->systemPublicKey);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getApiUri()
     {
@@ -109,15 +112,17 @@ abstract class BaseApi
     }
 
     /**
-     * @param mixed $apiUri
+     * @param string $apiUri
+     * @return $this
      */
     public function setApiUri($apiUri)
     {
         $this->apiUri = $apiUri;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getClientId()
     {
@@ -125,11 +130,13 @@ abstract class BaseApi
     }
 
     /**
-     * @param mixed $clientId
+     * @param string $clientId
+     * @return $this
      */
     public function setClientId($clientId)
     {
         $this->clientId = $clientId;
+        return $this;
     }
 
     /**
@@ -142,14 +149,16 @@ abstract class BaseApi
 
     /**
      * @param HttpRequest $http
+     * @return $this
      */
     public function setHttp($http)
     {
         $this->http = $http;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getClientSecret()
     {
@@ -157,11 +166,13 @@ abstract class BaseApi
     }
 
     /**
-     * @param mixed $clientSecret
+     * @param string $clientSecret
+     * @return $this
      */
     public function setClientSecret($clientSecret)
     {
         $this->clientSecret = $clientSecret;
+        return $this;
     }
 
     /**
@@ -174,10 +185,12 @@ abstract class BaseApi
 
     /**
      * @param string $systemPublicKey
+     * @return $this
      */
     public function setSystemPublicKey($systemPublicKey)
     {
         $this->systemPublicKey = $systemPublicKey;
+        return $this;
     }
 
     /**
@@ -190,9 +203,29 @@ abstract class BaseApi
 
     /**
      * @param string $userPrivateKey
+     * @return $this
      */
     public function setUserPrivateKey($userPrivateKey)
     {
         $this->userPrivateKey = $userPrivateKey;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorization()
+    {
+        return $this->authorization;
+    }
+
+    /**
+     * @param string $authorization
+     * @return $this
+     */
+    public function setAuthorization($authorization)
+    {
+        $this->authorization = $authorization;
+        return $this;
     }
 }

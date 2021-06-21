@@ -14,11 +14,28 @@ class LoginSessionApi extends BaseApi
 
     public function check() {
         $bussParams = [
-            'nonce' => 'a'.strval(rand(1000, 10000))
+            'nonce' => 'a'.strval(rand(1000, 10000)),
         ];
-        $po = RequestPoBuilder::getInstance()->bussParams($bussParams)
+        $po = RequestPoBuilder::getInstance()
+            ->bussParams($bussParams)
             ->serviceInfo('LoginSession/check','100')
             ->build();
+
         return $this->send($po);
     }
+
+//    public function login() {
+//        $bussParams = [
+//            'device_token' => md5(date("Ymd")),
+//            'device_type' => 'server',
+//            'mobile' => '12345678900',
+//            'code' => '',
+//            'country_no' => '86',
+//            'login_info' => ''
+//        ];
+//        $po = RequestPoBuilder::getInstance()
+//            ->bussParams($bussParams)
+//            ->serviceInfo('UserLoginSession/loginByMobileCode', '100')->build();
+//        return $this->send($po);
+//    }
 }
