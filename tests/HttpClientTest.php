@@ -4,9 +4,7 @@ require_once 'vendor/autoload.php';
 use by\component\api5client\loginSession\LoginSessionApi;
 
 date_default_timezone_set("PRC");
-//var_dump(date_default_timezone_get());
-//return;
-$apiUri = 'https://api-base.hebidu.cn/base';
+
 $devUri = 'http://127.0.0.1:8011/base';
 $clientId = 'by04esfH0glASt';
 $clientSecret = 'ee7c5016ee68051d9d3d9448ff3c89e7';
