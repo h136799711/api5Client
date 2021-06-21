@@ -1,6 +1,6 @@
 <?php
 
-namespace by\component\api5client\loginSession;
+namespace by\component\api5client\login_session;
 
 use by\component\api5client\infra\BaseApi;
 use by\component\api5client\infra\RequestPoBuilder;
