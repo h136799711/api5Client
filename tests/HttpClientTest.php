@@ -1,7 +1,6 @@
 <?php
 
 require_once 'vendor/autoload.php';
-use by\component\api5client\loginSession\LoginSessionApi;
 
 date_default_timezone_set("PRC");
 
@@ -15,7 +14,7 @@ $userPrivateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyttve5Hlhv
 $systemPublicKey = \by\component\api5client\infra\RsaUtil::formatPublicText($systemPublicKey);
 $userPrivateKey = \by\component\api5client\infra\RsaUtil::formatPrivateText($userPrivateKey);
 
-$loginSessionApi = new LoginSessionApi();
+$loginSessionApi = new \by\component\api5client\login_session\LoginSessionApi();
 $loginSessionApi->setApiUri($devUri);
 $loginSessionApi->setClientId($clientId);
 $loginSessionApi->setClientSecret($clientSecret);
