@@ -20,9 +20,14 @@ $loginSessionApi->setSystemPublicKey($systemPublicKey);
 // 用户私钥
 $loginSessionApi->setUserPrivateKey($userPrivateKey);
 
+// 登录校验码
 $token = '';
 
 $ret = $loginSessionApi->setAuthorization($token)->check();
+var_dump($ret);
+
+// 调用发送邮件接口
+$ret = $emailApi->sendEmail('hebiduhebi@126.com', '通知', '123456');
 var_dump($ret);
 ```
 
