@@ -19,6 +19,7 @@ abstract class BaseApi
     private $userPrivateKey;
     private $authorization;
 
+
     /**
      * BaseHttpClient constructor.
      * @param $apiUri
@@ -51,7 +52,9 @@ abstract class BaseApi
         return rtrim($this->apiUri, '/') . '/' . $requestPo->getServiceVersion() . '/' . $requestPo->getServiceType();
     }
 
-    function send(RequestPo $requestPo, $headers = [])
+    function send(RequestPo $requestPo, $headers = [
+        'Content-type' => MediaType::APPLICATION_FORM_URLENCODED
+    ])
     {
         $requestPo->setNotifyId($this->guid());
         $requestPo->setAppRequestTime(StringHelper::numberFormat(microtime(true), 3));
@@ -61,10 +64,9 @@ abstract class BaseApi
         $postArr = $requestPo->toArray();
         $url = $this->getServiceUrl($requestPo);
         if (!empty($this->getAuthorization())) {
-            $this->http->header(RequestHeader::AUTHORIZATION, $this->getAuthorization());
+            $headers[RequestHeader::AUTHORIZATION] = $this->getAuthorization();
         }
         $resp = $this->http
-            ->header(RequestHeader::CONTENT_TYPE, MediaType::APPLICATION_FORM_URLENCODED)
             ->headers($headers)
             ->post($url, $postArr);
         if (!$resp->success) {

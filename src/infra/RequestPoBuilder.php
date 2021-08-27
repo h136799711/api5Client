@@ -24,7 +24,7 @@ class RequestPoBuilder
 
     function bussParams(array $bussParams) {
         ksort($bussParams, SORT_ASC);
-        self::getInstance()->po->setBussData(json_encode($bussParams));
+        self::getInstance()->po->setBussData(json_encode($bussParams, JSON_UNESCAPED_UNICODE));
         return self::getInstance();
     }
 
