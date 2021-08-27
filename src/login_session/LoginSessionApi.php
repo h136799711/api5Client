@@ -12,22 +12,25 @@ class LoginSessionApi extends BaseApi
         parent::__construct('', '','', '', '');
     }
 
+    /**
+     * 检测是否已登录
+     * @param $userId
+     * @return \by\infrastructure\base\CallResult
+     */
     public function check($userId) {
         $bussParams = [
             'user_id' => $userId
         ];
-        $po = RequestPoBuilder::getInstance()
-            ->bussParams($bussParams)
-            ->serviceInfo('LoginSession/check','100')
-            ->build();
-        return $this->send($po);
-    }
 
+        return $this->newRequest()
+            ->bussParams($bussParams)
+            ->call('LoginSession/check', '100');
+    }
 //    public function login() {
 //        $bussParams = [
 //            'device_token' => md5(date("Ymd")),
 //            'device_type' => 'server',
-//            'mobile' => '12345678900',
+//            'mobile' => '',
 //            'code' => '',
 //            'country_no' => '86',
 //            'login_info' => ''

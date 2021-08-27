@@ -18,7 +18,32 @@ abstract class BaseApi
     private $systemPublicKey;
     private $userPrivateKey;
     private $authorization;
+    private $reqPo;
 
+    /**
+     * @return mixed
+     */
+    public function getReqPo()
+    {
+        return $this->reqPo;
+    }
+
+    public function newRequest() {
+        $this->reqPo = new RequestPo();
+        return $this;
+    }
+
+    public function  bussParams(array $bussParams) {
+        ksort($bussParams, SORT_ASC);
+        $this->reqPo->setBussData(json_encode($bussParams, JSON_UNESCAPED_UNICODE));
+        return $this;
+    }
+
+    public function call($serviceType, $serviceVersion = '100') {
+        $this->reqPo->setServiceType($serviceType);
+        $this->reqPo->setServiceVersion($serviceVersion);
+        return $this->send($this->reqPo);
+    }
 
     /**
      * BaseHttpClient constructor.
@@ -223,6 +248,7 @@ abstract class BaseApi
     }
 
     /**
+     * 设置 权限码 对需要登录的接口设置
      * @param string $authorization
      * @return $this
      */
