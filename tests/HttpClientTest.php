@@ -15,10 +15,10 @@ $userPrivateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDK8HPvpvz8l
 $emailApi = new \by\component\api5client\tool\ToolApi($devUri, $clientId, $clientSecret, $systemPublicKey, $userPrivateKey);
 
 
-//$ret = $emailApi->sendEmail('hebiduhebi@126.com', '通知', '123456');
-//var_dump($ret);
-//
-//return;
+$ret = $emailApi->sendEmail('hebiduhebi@126.com', '通知', '123456');
+var_dump($ret);
+
+return;
 $systemPublicKey = \by\component\api5client\infra\RsaUtil::formatPublicText($systemPublicKey);
 $userPrivateKey = \by\component\api5client\infra\RsaUtil::formatPrivateText($userPrivateKey);
 
